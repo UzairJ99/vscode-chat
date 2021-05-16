@@ -13,17 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+require("reflect-metadata");
+var cors = require('cors');
+var bodyParser = require('body-parser');
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    var bodyParser = require('body-parser');
     const app = express_1.default();
+    app.use(cors({ origin: "*" }));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
-    const PORT = process.env.PORT || 5000;
+    const PORT = process.env.PORT || 8080;
     app.get('/', (_req, res) => {
         res.send('hello world!');
     });
     app.post('/trigger', (req, res) => {
         let data = req.body;
+        console.log("it made it!");
         res.send(data["hi"]);
     });
     app.listen(PORT, () => {
