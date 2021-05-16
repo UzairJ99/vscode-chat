@@ -1,13 +1,16 @@
-<script>
+<script lang="ts">
+    import { onMount } from "svelte";
     import axios from 'axios';
 
     function sendMsg() {
-        data = {
+        var data = {
             "hi": "hi"
         }
-
+        const headers = {
+                "content-type": "application/json"
+            }
         //send to backend
-        axios.post('/trigger', data).then(response => {
+        axios.post('http://localhost:5000/trigger', data,{headers}).then(response => {
             console.log(response);
         });
     }

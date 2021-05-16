@@ -1762,10 +1762,11 @@ var app = (function () {
 
     function instance($$self) {
     	function sendMsg() {
-    		console.log("die!!!!");
+    		var data = { "hi": "hi" };
+    		const headers = { "content-type": "application/json" };
 
     		//send to backend
-    		axios.get("/trigger").then(response => {
+    		axios.post("http://localhost:5000/trigger", data, { headers }).then(response => {
     			console.log(response);
     		});
     	}
