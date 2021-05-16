@@ -15,8 +15,9 @@ const main = async () => {
     })
 
     // testing route trigger
-    app.get('/trigger', (req, res) => {
-        console.log("just got triggered.");
+    app.post('/trigger', (req, res) => {
+        let data = req.body;
+        res.send(data["hi"]);
     })
 
     // activate app on port

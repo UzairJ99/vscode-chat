@@ -2,10 +2,12 @@
     import axios from 'axios';
 
     function sendMsg() {
-        console.log("die!!!!");
+        data = {
+            "hi": "hi"
+        }
 
         //send to backend
-        axios.get('/trigger').then(response => {
+        axios.post('/trigger', data).then(response => {
             console.log(response);
         });
     }
