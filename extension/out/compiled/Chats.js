@@ -1763,10 +1763,10 @@ var app = (function () {
     function instance($$self) {
     	function sendMsg() {
     		var data = { "hi": "hi" };
-    		const headers = { "content-type": "application/json" };
+    		const headers = { "Content-type": "application/json" };
 
     		//send to backend
-    		axios.post("http://localhost:5000/trigger", data, { headers }).then(response => {
+    		axios.post("http://localhost:8080/trigger", data, { headers }).then(response => {
     			console.log(response);
     		});
     	}

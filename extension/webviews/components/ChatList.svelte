@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import axios from 'axios';
 
     function sendMsg() {
@@ -7,10 +6,10 @@
             "hi": "hi"
         }
         const headers = {
-                "content-type": "application/json"
+                "Content-type": "application/json",
             }
         //send to backend
-        axios.post('http://localhost:5000/trigger', data,{headers}).then(response => {
+        axios.post('http://localhost:8080/trigger', data,{headers}).then(response => {
             console.log(response);
         });
     }
