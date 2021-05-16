@@ -14,10 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
+    var bodyParser = require('body-parser');
     const app = express_1.default();
-    const PORT = 3002;
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.json());
+    const PORT = process.env.PORT || 5000;
     app.get('/', (_req, res) => {
-        res.send('hello');
+        res.send('hello world!');
+    });
+    app.post('/trigger', (req, res) => {
+        let data = req.body;
+        res.send(data["hi"]);
     });
     app.listen(PORT, () => {
         console.log(`Server started on port ${PORT}`);
