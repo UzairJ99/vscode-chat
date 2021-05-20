@@ -14,6 +14,20 @@ const main = async () => {
     app.use(cors({origin: "*"}));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
+
+    // socket.io setup and binding to http server
+    const http = require('http');
+    const server = http.createServer(app);
+    const {Server} = require('socket.io');
+    // cors needs to be setup again for the socket.io server
+    const io = new Server(server, {
+        cors: {
+          origin: "*",
+          methods: ["GET", "POST"]
+        }
+    });
+
+    let numUsers = 0;
     
     /*
         NOTE: in the terminal run the command npm run watch to recompile
@@ -38,10 +52,35 @@ const main = async () => {
         console.log(message);
         // replace with socket.io functionality and database functions
         res.send(message);
-    })
+    });
+
+    // Routes for socket.io specifically
+    io.on("connection", (socket: any) => {
+        ++numUsers;
+        let message = 'Server: A new user has joined the chat';
+        console.log(`some user connected.`);
+
+        socket.emit('user joined', { message, numUsers });
+	    socket.broadcast.emit('user joined', { message, numUsers });
+
+        // @param: message - the message being sent from the user
+        socket.on('message', (message:string) => {
+            socket.broadcast.emit('message', message);
+        });
+    
+        socket.on('disconnect', () => {
+            --numUsers;
+            socket.broadcast.emit('user left', numUsers);
+        });
+    
+        // @param: name - the username for the person leaving the chat
+        socket.on('user disconnect', (name:string) => {
+            socket.broadcast.emit('message', `Server: ${name} has left the chat.`)
+        });
+    });
 
     // activate app on port
-    app.listen(PORT, ()=> {
+    server.listen(PORT, ()=> {
         console.log(`Back end server started on port ${PORT}`);
     });
 };
