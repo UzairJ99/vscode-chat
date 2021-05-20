@@ -93,12 +93,6 @@
     {#each messages as message}
         <li transition:fade>{message}</li>
     {/each}
-    <!-- mesages will be stored as list items to display -->
-    <li class="messageBubble">hi</li>
-    <li class="messageBubble">hello</li>
-    <!-- after the button is clicked, the text message will be appended
-    to the bottom of the list here as a new li element -->
-
 </ul>
 
 <form action="">
