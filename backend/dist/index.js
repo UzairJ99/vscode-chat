@@ -21,17 +21,44 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     app.use(cors({ origin: "*" }));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
+    const http = require('http');
+    const server = http.createServer(app);
+    const { Server } = require('socket.io');
+    const io = new Server(server, {
+        cors: {
+            origin: "*",
+            methods: ["GET", "POST"]
+        }
+    });
+    let numUsers = 0;
     const PORT = process.env.PORT || 8080;
     app.get('/', (_req, res) => {
         res.send('hello world!');
     });
-    app.post('/trigger', (req, res) => {
-        let data = req.body;
-        console.log("it made it!");
-        res.send(data["hi"]);
+    app.post('/sendMessage', (req, res) => {
+        let message = req.body;
+        console.log(message);
+        res.send(message);
     });
-    app.listen(PORT, () => {
-        console.log(`Server started on port ${PORT}`);
+    io.on("connection", (socket) => {
+        ++numUsers;
+        let message = 'Server: A new user has joined the chat';
+        console.log(`some user connected.`);
+        socket.emit('user joined', { message, numUsers });
+        socket.broadcast.emit('user joined', { message, numUsers });
+        socket.on('message', (message) => {
+            socket.broadcast.emit('message', message);
+        });
+        socket.on('disconnect', () => {
+            --numUsers;
+            socket.broadcast.emit('user left', numUsers);
+        });
+        socket.on('user disconnect', (name) => {
+            socket.broadcast.emit('message', `Server: ${name} has left the chat.`);
+        });
+    });
+    server.listen(PORT, () => {
+        console.log(`Back end server started on port ${PORT}`);
     });
 });
 main();
