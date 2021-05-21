@@ -1,6 +1,6 @@
 <svelte:window on:unload={emitUserDisconnect}/>
 
-<script lang="ts">
+<script>
     import axios from 'axios';
     import Heading from './Heading.svelte';
     import io from "socket.io-client";
@@ -10,16 +10,16 @@
     const placeholder = 'Type your message here...';
 
     // initial message settings
-    let message:string = '';
-    let messages:Array<string> = [''];
-    let name:string = 'Anonymous';
-    let numOfUsers:number = 0;
+    let message = '';
+    let messages= [];
+    let name= 'Anonymous';
+    let numOfUsers = 0;
 
     /*
         adds the sent message to the array of messages for this chat
         @param: message - the message being sent
     */
-    socket.on("message", (message:any) => {		
+    socket.on("message", (message) => {		
 		messages = messages.concat(message);
 	});
 	
@@ -28,7 +28,7 @@
         @param: message - the message being sent
         @param: numUsers - the number of users in the chat room
     */
-	socket.on("user joined", ({message, numUsers}:any) => {
+	socket.on("user joined", ({message, numUsers}) => {
 		messages = messages.concat(message);
 		numOfUsers = numUsers;
 	});
@@ -37,7 +37,7 @@
         when a user leaves the chat room
         @param: numUsers - number of users in the room is now updated
     */
-	socket.on("user left", (numUsers:any) => {
+	socket.on("user left", (numUsers) => {
 		numOfUsers = numUsers;
 	});
 
@@ -84,20 +84,21 @@
 
 <!-- Messages UI Starts Here -->
 
-<Heading text={'Chats'} />
-
+<Heading text={''} />
 
 <!-- unordered list will hold all the messages exchanged between the users-->
 <ul id="messages">
     <!-- display each message from the messages array as an li tag -->
     {#each messages as message}
-        <li transition:fade>{message}</li>
+        <li class="messageBubble" transition:fade>{message}</li>
     {/each}
 </ul>
 
 <form action="">
-    <input id="messageBox" autocomplete="off" {placeholder} bind:value={message} />
-    <button id="sendMsgBtn" on:click|preventDefault={sendMsg}>SEND</button>
+    <span id="messageSpan">
+        <input id="messageBox" autocomplete="off" {placeholder} bind:value={message} />
+        <button id="sendMsgBtn" on:click|preventDefault={sendMsg}>SEND</button>    
+    </span>
 </form>
 
 <p id="numUsers">There {numOfUsers == 1 ? 'is' : 'are'} {numOfUsers} {numOfUsers == 1 ? 'user' : 'users'} currently chatting!</p>

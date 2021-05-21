@@ -1989,23 +1989,31 @@ var app = (function () {
 
     function create_fragment$1(ctx) {
     	let div;
+    	let a;
+    	let t1;
     	let h1;
-    	let t;
+    	let t2;
 
     	return {
     		c() {
     			div = element("div");
+    			a = element("a");
+    			a.textContent = "Name";
+    			t1 = space();
     			h1 = element("h1");
-    			t = text(/*text*/ ctx[0]);
-    			attr(div, "id", "heading");
+    			t2 = text(/*text*/ ctx[0]);
+    			attr(a, "href", "#Name");
+    			attr(div, "class", "topnav");
     		},
     		m(target, anchor) {
     			insert(target, div, anchor);
+    			append(div, a);
+    			append(div, t1);
     			append(div, h1);
-    			append(h1, t);
+    			append(h1, t2);
     		},
     		p(ctx, [dirty]) {
-    			if (dirty & /*text*/ 1) set_data(t, /*text*/ ctx[0]);
+    			if (dirty & /*text*/ 1) set_data(t2, /*text*/ ctx[0]);
     		},
     		i: noop,
     		o: noop,
@@ -6841,7 +6849,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (79:4) {#each messages as message}
+    // (92:4) {#each messages as message}
     function create_each_block(ctx) {
     	let li;
     	let t_value = /*message*/ ctx[2] + "";
@@ -6853,6 +6861,7 @@ var app = (function () {
     		c() {
     			li = element("li");
     			t = text(t_value);
+    			attr(li, "class", "messageBubble");
     		},
     		m(target, anchor) {
     			insert(target, li, anchor);
@@ -6890,6 +6899,7 @@ var app = (function () {
     	let ul;
     	let t1;
     	let form;
+    	let span;
     	let input;
     	let t2;
     	let button;
@@ -6907,7 +6917,7 @@ var app = (function () {
     	let current;
     	let mounted;
     	let dispose;
-    	heading = new Heading({ props: { text: "Chats" } });
+    	heading = new Heading({ props: { text: "" } });
     	let each_value = /*messages*/ ctx[0];
     	let each_blocks = [];
 
@@ -6931,6 +6941,7 @@ var app = (function () {
 
     			t1 = space();
     			form = element("form");
+    			span = element("span");
     			input = element("input");
     			t2 = space();
     			button = element("button");
@@ -6949,6 +6960,7 @@ var app = (function () {
     			attr(input, "autocomplete", "off");
     			attr(input, "placeholder", placeholder);
     			attr(button, "id", "sendMsgBtn");
+    			attr(span, "id", "messageSpan");
     			attr(form, "action", "");
     			attr(p, "id", "numUsers");
     		},
@@ -6963,10 +6975,11 @@ var app = (function () {
 
     			insert(target, t1, anchor);
     			insert(target, form, anchor);
-    			append(form, input);
+    			append(form, span);
+    			append(span, input);
     			set_input_value(input, /*message*/ ctx[2]);
-    			append(form, t2);
-    			append(form, button);
+    			append(span, t2);
+    			append(span, button);
     			insert(target, t4, anchor);
     			insert(target, p, anchor);
     			append(p, t5);
@@ -7068,7 +7081,7 @@ var app = (function () {
     	// initial message settings
     	let message = "";
 
-    	let messages = [""];
+    	let messages = [];
     	let numOfUsers = 0;
 
     	/*

@@ -1,5 +1,18 @@
-<script lange="ts">
-    export let text;
+
+<script>
+  
+  export let text;
 </script>
 
-<div id="heading"><h1>{text}</h1></div>
+<style>
+   
+</style>
+
+  
+
+
+<div class="topnav">
+  <a href="#Name">Name</a>
+  <h1>{text}</h1>
+  
+</div>
