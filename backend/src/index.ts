@@ -1,28 +1,88 @@
 import express from 'express';
+import "reflect-metadata";
+var cors = require('cors');
+var bodyParser = require('body-parser');
 
 const main = async () => {
-    var bodyParser = require('body-parser')
 
     const app = express();
-    app.use(bodyParser.urlencoded({ extended: false }))
-    app.use(bodyParser.json())
+    /*
+        configuration for cross origin resource sharing since the VS Code API
+        is running seperately from our backend server.
+        Body parser used for data extraction from HTTP requests.
+    */
+    app.use(cors({origin: "*"}));
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.json());
 
-    const PORT = process.env.PORT || 5000;
+    // socket.io setup and binding to http server
+    const http = require('http');
+    const server = http.createServer(app);
+    const {Server} = require('socket.io');
+    // cors needs to be setup again for the socket.io server
+    const io = new Server(server, {
+        cors: {
+          origin: "*",
+          methods: ["GET", "POST"]
+        }
+    });
 
-    // landing page - go to localhost:5000 to test if this shows up
+    let numUsers = 0;
+    
+    /*
+        NOTE: in the terminal run the command npm run watch to recompile
+        in the backend directory if the port is not configured correctly 
+        or if it's using a previously set up port.
+        When refactoring later we will change the app's path to a constant
+        variable so ports don't get mixed up.
+        If PORT is changed here, also change it in ChatList.svelte's 
+        sendMsg() function.
+    */
+    const PORT = process.env.PORT || 8080;
+
+    // landing page - go to localhost:8080 to test if this shows up
     app.get('/', (_req, res)=> {
         res.send('hello world!');
-    })
+    });
 
-    // testing route trigger
-    app.get('/trigger', (req, res) => {
-        console.log("just got triggered.");
-    })
+    // send message from the textbox to the database
+    app.post('/sendMessage', (req, res) => {
+        // extract text message from the body of the request sent
+        let message = req.body;
+        console.log(message);
+        // replace with socket.io functionality and database functions
+        res.send(message);
+    });
+
+    // Routes for socket.io specifically
+    io.on("connection", (socket: any) => {
+        ++numUsers;
+        let message = 'Server: A new user has joined the chat';
+        console.log(`some user connected.`);
+
+        socket.emit('user joined', { message, numUsers });
+	    socket.broadcast.emit('user joined', { message, numUsers });
+
+        // @param: message - the message being sent from the user
+        socket.on('message', (message:string) => {
+            socket.broadcast.emit('message', message);
+        });
+    
+        socket.on('disconnect', () => {
+            --numUsers;
+            socket.broadcast.emit('user left', numUsers);
+        });
+    
+        // @param: name - the username for the person leaving the chat
+        socket.on('user disconnect', (name:string) => {
+            socket.broadcast.emit('message', `Server: ${name} has left the chat.`)
+        });
+    });
 
     // activate app on port
-    app.listen(PORT, ()=> {
-        console.log(`Server started on port ${PORT}`);
-    })
+    server.listen(PORT, ()=> {
+        console.log(`Back end server started on port ${PORT}`);
+    });
 };
 
 main();

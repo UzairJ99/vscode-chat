@@ -13,14 +13,52 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+require("reflect-metadata");
+var cors = require('cors');
+var bodyParser = require('body-parser');
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const app = express_1.default();
-    const PORT = 3002;
-    app.get('/', (_req, res) => {
-        res.send('hello');
+    app.use(cors({ origin: "*" }));
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.json());
+    const http = require('http');
+    const server = http.createServer(app);
+    const { Server } = require('socket.io');
+    const io = new Server(server, {
+        cors: {
+            origin: "*",
+            methods: ["GET", "POST"]
+        }
     });
-    app.listen(PORT, () => {
-        console.log(`Server started on port ${PORT}`);
+    let numUsers = 0;
+    const PORT = process.env.PORT || 8080;
+    app.get('/', (_req, res) => {
+        res.send('hello world!');
+    });
+    app.post('/sendMessage', (req, res) => {
+        let message = req.body;
+        console.log(message);
+        res.send(message);
+    });
+    io.on("connection", (socket) => {
+        ++numUsers;
+        let message = 'Server: A new user has joined the chat';
+        console.log(`some user connected.`);
+        socket.emit('user joined', { message, numUsers });
+        socket.broadcast.emit('user joined', { message, numUsers });
+        socket.on('message', (message) => {
+            socket.broadcast.emit('message', message);
+        });
+        socket.on('disconnect', () => {
+            --numUsers;
+            socket.broadcast.emit('user left', numUsers);
+        });
+        socket.on('user disconnect', (name) => {
+            socket.broadcast.emit('message', `Server: ${name} has left the chat.`);
+        });
+    });
+    server.listen(PORT, () => {
+        console.log(`Back end server started on port ${PORT}`);
     });
 });
 main();
