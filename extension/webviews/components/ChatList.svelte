@@ -90,7 +90,10 @@
 <ul id="messages">
     <!-- display each message from the messages array as an li tag -->
     {#each messages as message}
+    <div>
         <li class="messageBubble" transition:fade>{message}</li>
+    </div>
+        
     {/each}
 </ul>
 

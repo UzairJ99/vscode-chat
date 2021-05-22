@@ -5,11 +5,14 @@ h1 {
 .messageBubble {
     list-style-type: none;
     background-color: white;
-    padding: 5px;
+    padding: 15px;
     border-radius: 15px;
     color: black;
+    display: inline-block;
     max-width: 60%;
     margin: 5px 0 5px -15px;
+    white-space: pre-wrap; 
+    overflow-wrap: break-word;
 }
 
 /* start of message bar */
@@ -17,8 +20,9 @@ h1 {
     display: flex;
     position: fixed;
     bottom: 0;
-    width: 100%;
+    width: 95%;
     height: 42px;
+    float: left;
 }
 
 #messageBox:hover, #messageBox:focus, #sendMsgButton:hover, #sendMsgButton:focus {
@@ -27,25 +31,28 @@ h1 {
 }
 
 #messageBox {
-    width: 70%;
-    font-size: 16px;
-    /* padding: 10px !important; */
-    padding: 10px -10px 10px 10px !important;
-    margin: 5px;
+    font-size: 14px;
+    padding: 5px 5px 5px 15px !important;
     border-radius: 15px;
+    float: left;
+    outline: none; 
+    user-select: text; 
+    white-space: pre-wrap; 
+    overflow-wrap: break-word;
 }
 
 #sendMsgBtn {
-    width: 20%;
-    margin: 5px;
+    width: 15%;
+    margin-left: 10px;
     border-radius: 15px;
+    float: right;
 }
 
 /* end of message bar */
 
-div {
+/* div {
     padding: 10px;
-}
+} */
 
 button {
     padding: 5px !important;
@@ -58,22 +65,23 @@ button {
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     height: 30px;
-  }
+    padding: 10px;
+}
   
   /* Style the links inside the navigation bar */
-  .topnav a {
+.topnav a {
     float: left;
     color: #f2f2f2;
     text-align: center;
     padding: 7px 1px;
     text-decoration: none;
     font-size: 17px;
-  }
+}
   
   /* Change the color of links on hover */
-  .topnav a:hover, a:focus {
+.topnav a:hover, a:focus {
     color: rgb(182, 182, 182);
     border: none;
     outline: none;
-  }
+}
   
