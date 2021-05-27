@@ -14,10 +14,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 require("reflect-metadata");
+const passport_1 = __importDefault(require("passport"));
+require('dotenv').config();
 var cors = require('cors');
 var bodyParser = require('body-parser');
+var GitHubStrategy = require('passport-github').Strategy;
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const app = express_1.default();
+    app.use(passport_1.default.initialize());
+    passport_1.default.serializeUser(function (user, done) {
+        done(null, user.accessToken);
+    });
+    passport_1.default.use(new GitHubStrategy({
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: "http://localhost:8080/auth/github/callback"
+    }, (_, __, profile, cb) => {
+        console.log(profile);
+        cb(null, { accessToken: "", refreshToken: "" });
+        User.findOrCreate({ githubId: profile.id }, function (err, user) {
+            return cb(err, user);
+        });
+    }));
+    app.get('/auth/github', passport_1.default.authenticate('github'));
+    app.get('/auth/github/callback', passport_1.default.authenticate('github'), (req, res) => {
+        res.send("you logged in correctly");
+        res.redirect('/');
+    });
     app.use(cors({ origin: "*" }));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
