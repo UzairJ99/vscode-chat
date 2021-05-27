@@ -1,11 +1,44 @@
 import express from 'express';
 import "reflect-metadata";
+import passport from "passport";
+require('dotenv').config();
 var cors = require('cors');
 var bodyParser = require('body-parser');
+
+var GitHubStrategy = require('passport-github').Strategy;
+
+
 
 const main = async () => {
 
     const app = express();
+    app.use(passport.initialize());
+    passport.serializeUser(function(user: any, done) {
+        done(null, user.accessToken); 
+      });
+
+      passport.use(new GitHubStrategy({
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: "http://localhost:8080/auth/github/callback"
+      },
+      (_, __, profile, cb) => {
+        console.log(profile)
+        cb(null,{ accessToken: "", refreshToken: ""})
+        User.findOrCreate({ githubId: profile.id }, function (err, user) {
+          return cb(err, user);
+        });
+      }
+    ));
+    app.get('/auth/github',passport.authenticate('github'));
+    app.get('/auth/github/callback', 
+    passport.authenticate('github'),
+    (req, res) => {
+        res.send("you logged in correctly")
+      // Successful authentication, redirect home.
+      res.redirect('/');
+    });
+
     /*
         configuration for cross origin resource sharing since the VS Code API
         is running seperately from our backend server.
@@ -41,6 +74,7 @@ const main = async () => {
     const PORT = process.env.PORT || 8080;
 
     // landing page - go to localhost:8080 to test if this shows up
+    
     app.get('/', (_req, res)=> {
         res.send('hello world!');
     });
