@@ -2,18 +2,49 @@ h1 {
     font-size: 30px;
 }
 
-.messageBubble {
+.messageBubble-right {
     list-style-type: none;
     background-color: white;
     padding: 15px;
     border-radius: 15px;
     color: black;
-    display: inline-block;
+    float: right;
     max-width: 60%;
     margin: 5px 0 5px -15px;
     white-space: pre-wrap; 
     overflow-wrap: break-word;
 }
+
+/* message bubble stuff */
+.messageBubble-left {
+    list-style-type: none;
+    background-color: white;
+    padding: 15px;
+    border-radius: 15px;
+    color: black;
+    float: left;
+    max-width: 60%;
+    margin: 5px 0 5px -15px;
+    white-space: pre-wrap; 
+    overflow-wrap: break-word;
+}
+
+
+.msgBubbleContainer {
+    width: 100%;
+    display: inline-block;
+}
+/* end of message bubble stuff */
+
+/* when a user is typing we'll show that they are in a paragraph tag */
+#typing {
+    display: block;
+}
+
+#noTyping {
+    display: none;
+}
+/* end of user typing */
 
 /* start of message bar */
 #messageSpan {

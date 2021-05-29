@@ -14,6 +14,8 @@
     let messages= [];
     let name= 'Anonymous'; // pull this from github oauth after sign in
     let numOfUsers = 0;
+    var side = 'left';
+    var isTyping = false
 
     /**
      * add the message to the array of messages for this chat
@@ -52,17 +54,40 @@
 	function emitUserDisconnect() {
 		socket.emit('user disconnect', name); 
 	}
+    
+    /**
+     * displays if a user is typing or not
+     * @return {void}
+    */
+    function displayLabel() {
+        isTyping = (message == '') ? false : true;
+    }
 
     // sends the message from the textbox to the backend
     function sendMsg() {
+        isTyping = false;
         // check for valid input and trim white space
         message = message.trim();
         if (message === '') {
             return;
         }
 
+        /**
+         * information about the message
+         * @param {string} text - the text message
+         * @param {string} name - the username of who sent the message
+         * @param {boolean} received - lets css know which side of the panel to display it on;
+         * true = left side; otherwise right side
+         */
+        let messageData = {
+            text: message,
+            name: name,
+            received: false
+        }
+        
+        // messages = [{text: 'hi', name: 'name', received: false}, {text: 'hi', name: 'name', received: false}]
         let messageString = `${name}: ${message}`;
-        messages = messages.concat(messageString);
+        messages = messages.concat(messageData);
         // let the backend know a message has been sent
 		socket.emit("message", messageString);
 
@@ -97,19 +122,20 @@
 <ul id="messages">
     <!-- display each message from the messages array as an li tag -->
     {#each messages as message}
-    <div>
-        <li class="messageBubble" transition:fade>{message}</li>
-    </div>
-        
+        <div class="msgBubbleContainer">
+            <li class={`messageBubble-${side = message.received ? 'left' : 'right'}`} transition:fade>{message.text}</li>
+        </div>
     {/each}
 </ul>
 
 <form action="">
     <span id="messageSpan">
-        <input id="messageBox" autocomplete="off" {placeholder} bind:value={message} />
+        <input id="messageBox" autocomplete="off" {placeholder} bind:value={message} on:input={displayLabel}/>
         <button id="sendMsgBtn" on:click|preventDefault={sendMsg}>SEND</button>    
     </span>
 </form>
+
+<p id={isTyping ? 'typing' : 'noTyping'}>{name} is typing...</p>
 
 <p id="numUsers">There {numOfUsers == 1 ? 'is' : 'are'} {numOfUsers} {numOfUsers == 1 ? 'user' : 'users'} currently chatting!</p>
 
