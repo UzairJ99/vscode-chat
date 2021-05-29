@@ -18,11 +18,11 @@ h1 {
 /* start of message bar */
 #messageSpan {
     display: flex;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     width: 95%;
     height: 42px;
-    float: left;
+    float: right;
 }
 
 #messageBox:hover, #messageBox:focus, #sendMsgButton:hover, #sendMsgButton:focus {
@@ -76,6 +76,8 @@ button {
     padding: 7px 1px;
     text-decoration: none;
     font-size: 17px;
+    position: absolute;
+    left: 75px;
 }
   
   /* Change the color of links on hover */
@@ -84,4 +86,17 @@ button {
     border: none;
     outline: none;
 }
+.topnav .circle {
+    float: left;
+    position: absolute;
+    top: 12px;
+}
+
+.topnav .circle .dot {
+    height: 35px;
+    width: 35px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+  }
   
