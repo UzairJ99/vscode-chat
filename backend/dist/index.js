@@ -74,7 +74,11 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     });
     io.on("connection", (socket) => {
         ++numUsers;
-        let message = 'Server: A new user has joined the chat';
+        let message = {
+            text: 'A new user has joined the chat',
+            name: 'Server',
+            received: true
+        };
         console.log(`some user connected.`);
         socket.emit('user joined', { message, numUsers });
         socket.broadcast.emit('user joined', { message, numUsers });
