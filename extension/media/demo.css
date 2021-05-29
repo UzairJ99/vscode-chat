@@ -34,26 +34,32 @@ h1 {
     width: 100%;
     display: inline-block;
 }
+
+.messageContainer {
+    /* position: fixed; */
+    height: 90%;
+    width: 100%;
+    overflow-y: scroll;
+    margin-bottom: 40px;
+    margin-top: 40px;
+}
 /* end of message bubble stuff */
 
-/* when a user is typing we'll show that they are in a paragraph tag */
-#typing {
-    display: block;
-}
-
-#noTyping {
-    display: none;
-}
-/* end of user typing */
-
 /* start of message bar */
+#userTyping {
+    bottom: 0;
+}
+
 #messageSpan {
     display: flex;
-    position: absolute;
+    position: fixed;
     bottom: 0;
-    width: 95%;
+    width: 90%;
     height: 42px;
     float: right;
+    background-color: var(--vscode-editor-background);
+    margin-bottom: 0;
+    padding: 10px;
 }
 
 #messageBox:hover, #messageBox:focus, #sendMsgButton:hover, #sendMsgButton:focus {
@@ -77,13 +83,10 @@ h1 {
     margin-left: 10px;
     border-radius: 15px;
     float: right;
+    margin-right: 0;
 }
 
 /* end of message bar */
-
-/* div {
-    padding: 10px;
-} */
 
 button {
     padding: 5px !important;
@@ -91,12 +94,17 @@ button {
 }
 
 .topnav {
-    background-color: rgba(0, 0, 0, 0.507);
+    background-color: rgba(0, 0, 0);
     overflow: hidden;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     height: 30px;
     padding: 10px;
+    width: 90%;
+    position: fixed;
+    top: 0;
+    margin-bottom: 20px;
+    margin-top: 0;
 }
   
   /* Style the links inside the navigation bar */
@@ -130,4 +138,12 @@ button {
     border-radius: 50%;
     display: inline-block;
   }
+.nav-wrapper{
+    position: fixed;
+    top:0;
+    width: 100%;
+    height: 30px;
+    margin-top:0;
+    background-color: var(--vscode-editor-background);
+}
   

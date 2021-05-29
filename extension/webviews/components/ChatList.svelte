@@ -5,6 +5,7 @@
     import Heading from './Heading.svelte';
     import io from "socket.io-client";
 	import { fade } from "svelte/transition";
+    import * as animateScroll from "svelte-scrollto";
 
     const socket = io('http://localhost:8080');
     const placeholder = 'Type your message here...';
@@ -84,7 +85,7 @@
             name: name,
             received: false
         }
-        
+
         // messages = [{text: 'hi', name: 'name', received: false}, {text: 'hi', name: 'name', received: false}]
         let messageString = `${name}: ${message}`;
         messages = messages.concat(messageData);
@@ -110,6 +111,8 @@
 
         // clear
         message = '';
+
+        animateScroll.scrollToBottom();
     }
 
 </script>
@@ -119,14 +122,17 @@
 <Heading text={''} />
 
 <!-- unordered list will hold all the messages exchanged between the users-->
-<ul id="messages">
-    <!-- display each message from the messages array as an li tag -->
-    {#each messages as message}
-        <div class="msgBubbleContainer">
-            <li class={`messageBubble-${side = message.received ? 'left' : 'right'}`} transition:fade>{message.text}</li>
-        </div>
-    {/each}
-</ul>
+<div class='messageContainer'>
+    <ul id="messages">
+        <!-- display each message from the messages array as an li tag -->
+        {#each messages as message}
+            <div class="msgBubbleContainer">
+                <li class={`messageBubble-${side = message.received ? 'left' : 'right'}`} transition:fade>{message.text}</li>
+            </div>
+        {/each}
+    </ul>
+</div>
+
 
 <form action="">
     <span id="messageSpan">
@@ -134,10 +140,10 @@
         <button id="sendMsgBtn" on:click|preventDefault={sendMsg}>SEND</button>    
     </span>
 </form>
+<!-- show if a user is typing or not -->
+<p id="userTyping">{isTyping ? `${name} is typing...` : '' }</p>
 
-<p id={isTyping ? 'typing' : 'noTyping'}>{name} is typing...</p>
-
-<p id="numUsers">There {numOfUsers == 1 ? 'is' : 'are'} {numOfUsers} {numOfUsers == 1 ? 'user' : 'users'} currently chatting!</p>
+<!-- <p id="numUsers">There {numOfUsers == 1 ? 'is' : 'are'} {numOfUsers} {numOfUsers == 1 ? 'user' : 'users'} currently chatting!</p> -->
 
 <!-- Messages UI Ends Here -->
 

@@ -110,7 +110,11 @@ const main = async () => {
     // Routes for socket.io specifically
     io.on("connection", (socket: any) => {
         ++numUsers;
-        let message = 'Server: A new user has joined the chat';
+        let message = {
+            text: 'A new user has joined the chat',
+            name: 'Server',
+            received: true
+        };
         console.log(`some user connected.`);
 
         socket.emit('user joined', { message, numUsers });
