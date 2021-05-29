@@ -1,52 +1,71 @@
 import express from 'express';
 import "reflect-metadata";
 import passport from "passport";
-require('dotenv').config();
+
+require('dotenv-safe').config();
+
+var mongoose = require('mongoose');
 var cors = require('cors');
 var bodyParser = require('body-parser');
-
 var GitHubStrategy = require('passport-github').Strategy;
 
-
-
 const main = async () => {
-
     const app = express();
-    app.use(passport.initialize());
-    passport.serializeUser(function(user: any, done) {
-        done(null, user.accessToken); 
-      });
-
-      passport.use(new GitHubStrategy({
-        clientID: process.env.GITHUB_CLIENT_ID,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: "http://localhost:8080/auth/github/callback"
-      },
-      (_, __, profile, cb) => {
-        console.log(profile)
-        cb(null,{ accessToken: "", refreshToken: ""})
-        User.findOrCreate({ githubId: profile.id }, function (err, user) {
-          return cb(err, user);
-        });
-      }
-    ));
-    app.get('/auth/github',passport.authenticate('github'));
-    app.get('/auth/github/callback', 
-    passport.authenticate('github'),
-    (req, res) => {
-        res.send("you logged in correctly")
-      // Successful authentication, redirect home.
-      res.redirect('/');
-    });
 
     /*
-        configuration for cross origin resource sharing since the VS Code API
-        is running seperately from our backend server.
-        Body parser used for data extraction from HTTP requests.
+      configuration for cross origin resource sharing since the VS Code API
+      is running seperately from our backend server.
+      Body parser used for data extraction from HTTP requests.
     */
     app.use(cors({origin: "*"}));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
+
+    // mongo db configuration settings for connection
+    const mongoDBParams = {
+      useCreateIndex: true,
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }
+    const mongoURL:string = 'mongodb+srv://vschat:vscode-chat@cluster0.ldo5i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+
+    // connect to database
+    mongoose.connect(mongoURL, mongoDBParams, () => {
+      console.log('Connected to database.');
+    });
+
+    app.use(passport.initialize());
+    // authenticate user
+    passport.serializeUser(function(user: any, done) {
+        done(null, user.accessToken); 
+    });
+
+    // github Oauth parameters
+    const gitHubParams = {
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: "http://localhost:8080/auth/github/callback"
+    }
+
+    // login user to github through passport
+    passport.use(new GitHubStrategy(gitHubParams, (_: any, __: any, profile: object, cb: any) => {
+        console.log(profile);
+        console.log(cb);
+        cb(null, { accessToken: "", refreshToken: ""})
+        // add user to database if not already existing
+        // User.findOrCreate({ githubId: profile.id }, function (err: any, user: any) {
+        //     return cb(err, user);
+        // });
+      }
+    ));
+
+    app.get('/auth/github', passport.authenticate('github', {session: false}));
+    app.get('/auth/github/callback', 
+    passport.authenticate('github', {session:false}), (_req, res) => {
+        res.send("you logged in correctly")
+        // Successful authentication, redirect home.
+        res.redirect('/');
+    });
 
     // socket.io setup and binding to http server
     const http = require('http');
@@ -95,19 +114,31 @@ const main = async () => {
         console.log(`some user connected.`);
 
         socket.emit('user joined', { message, numUsers });
-	    socket.broadcast.emit('user joined', { message, numUsers });
+	      socket.broadcast.emit('user joined', { message, numUsers });
 
-        // @param: message - the message being sent from the user
+        /**
+         * broad cast the message to the socket.io server
+         * @param {string} message - the message being sent from the user
+         * @return {void}
+         */
         socket.on('message', (message:string) => {
             socket.broadcast.emit('message', message);
         });
     
+        /**
+         * disconnect the user from the socket.io server
+         * @return {void}
+         */
         socket.on('disconnect', () => {
             --numUsers;
             socket.broadcast.emit('user left', numUsers);
         });
     
-        // @param: name - the username for the person leaving the chat
+        /**
+         * broad cast the user leaving from the server, to the socket.io server
+         * @param {string} name - username of person leaving
+         * @return {void}
+         */
         socket.on('user disconnect', (name:string) => {
             socket.broadcast.emit('message', `Server: ${name} has left the chat.`)
         });

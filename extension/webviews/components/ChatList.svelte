@@ -12,36 +12,43 @@
     // initial message settings
     let message = '';
     let messages= [];
-    let name= 'Anonymous';
+    let name= 'Anonymous'; // pull this from github oauth after sign in
     let numOfUsers = 0;
 
-    /*
-        adds the sent message to the array of messages for this chat
-        @param: message - the message being sent
+    /**
+     * add the message to the array of messages for this chat
+     * @param {string} message - the message
+     * @return {void}
     */
     socket.on("message", (message) => {		
 		messages = messages.concat(message);
 	});
 	
-    /*
-        when a new user joins the chat room.
-        @param: message - the message being sent
-        @param: numUsers - the number of users in the chat room
+    /**
+     * increase users in chat and connect user to socket.io server
+     * @param {string} message - the message
+     * @param {number} numUsers - current amount of users in chat room
+     * @return {void}
     */
 	socket.on("user joined", ({message, numUsers}) => {
 		messages = messages.concat(message);
 		numOfUsers = numUsers;
 	});
 
-    /*
-        when a user leaves the chat room
-        @param: numUsers - number of users in the room is now updated
+    /**
+     * disconnect user from socket.io server
+     * @param {number} numUsers - current number of users in chat room
+     * @return {void}
     */
 	socket.on("user left", (numUsers) => {
 		numOfUsers = numUsers;
 	});
 
-    // disconnects user from socket
+    /**
+     * disconnects user from socket
+     * @param {string} name - username
+     * @return {void}
+     */
 	function emitUserDisconnect() {
 		socket.emit('user disconnect', name); 
 	}
