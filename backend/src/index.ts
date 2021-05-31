@@ -1,7 +1,7 @@
 import express from 'express';
 import "reflect-metadata";
 import passport from "passport";
-
+var User = require("./models/User")
 require('dotenv-safe').config();
 
 var mongoose = require('mongoose');
@@ -11,6 +11,24 @@ var GitHubStrategy = require('passport-github').Strategy;
 
 const main = async () => {
     const app = express();
+    /*
+        NOTE: in the terminal run the command npm run watch to recompile
+        in the backend directory if the port is not configured correctly 
+        or if it's using a previously set up port.
+        When refactoring later we will change the app's path to a constant
+        variable so ports don't get mixed up.
+        If PORT is changed here, also change it in ChatList.svelte's 
+        sendMsg() function.
+    */
+    const PORT = process.env.PORT || 8080;
+    // connect to database
+    await mongoose.connect(process.env.MONGODB_URI, {
+        useCreateIndex: true,
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }, () => {
+      console.log('Connected to database.');
+    });
 
     /*
       configuration for cross origin resource sharing since the VS Code API
@@ -20,20 +38,7 @@ const main = async () => {
     app.use(cors({origin: "*"}));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
-
-    // mongo db configuration settings for connection
-    const mongoDBParams = {
-      useCreateIndex: true,
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }
-    const mongoURL:string = 'mongodb+srv://vschat:vscode-chat@cluster0.ldo5i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-
-    // connect to database
-    mongoose.connect(mongoURL, mongoDBParams, () => {
-      console.log('Connected to database.');
-    });
-
+    
     app.use(passport.initialize());
     // authenticate user
     passport.serializeUser(function(user: any, done) {
@@ -48,23 +53,42 @@ const main = async () => {
     }
 
     // login user to github through passport
-    passport.use(new GitHubStrategy(gitHubParams, (_: any, __: any, profile: object, cb: any) => {
-        console.log(profile);
-        console.log(cb);
-        cb(null, { accessToken: "", refreshToken: ""})
-        // add user to database if not already existing
-        // User.findOrCreate({ githubId: profile.id }, function (err: any, user: any) {
-        //     return cb(err, user);
-        // });
-      }
-    ));
+    passport.use(new GitHubStrategy(gitHubParams, async (_: any, __: any, profile: any, cb: any) => {
+        // extract github profile from json data and create a user object for the mongoose model
+        let gitHubProfileJSON = profile._json;
+        let user = await User.findOne({githubId: gitHubProfileJSON.id})
+        let userData = {
+            githubId: gitHubProfileJSON.id, 
+            name: gitHubProfileJSON.name, 
+            avatarUrl: gitHubProfileJSON.avatar_url,
+            profileUrl: gitHubProfileJSON.url
+        }
+    
+        if (user) {
+            //user = userData;
+            await user.save();
+            // return cb(user);
+        }
+        else{
+            user = await User.create(userData, (newUser: any, err: any) => {
+                console.log(userData,"\n",newUser)
+                if(err){
+                    // return cb(err, user);
+                }
+                newUser.save();
+                return cb(user);
+                // return cb(err, user);
+            })
+        }
+
+        return;
+    }));
 
     app.get('/auth/github', passport.authenticate('github', {session: false}));
     app.get('/auth/github/callback', 
     passport.authenticate('github', {session:false}), (_req, res) => {
         res.send("you logged in correctly")
         // Successful authentication, redirect home.
-        res.redirect('/');
     });
 
     // socket.io setup and binding to http server
@@ -80,22 +104,10 @@ const main = async () => {
     });
 
     let numUsers = 0;
-    
-    /*
-        NOTE: in the terminal run the command npm run watch to recompile
-        in the backend directory if the port is not configured correctly 
-        or if it's using a previously set up port.
-        When refactoring later we will change the app's path to a constant
-        variable so ports don't get mixed up.
-        If PORT is changed here, also change it in ChatList.svelte's 
-        sendMsg() function.
-    */
-    const PORT = process.env.PORT || 8080;
 
     // landing page - go to localhost:8080 to test if this shows up
-    
     app.get('/', (_req, res)=> {
-        res.send('hello world!');
+        res.send("HI");  
     });
 
     // send message from the textbox to the database
