@@ -70,7 +70,7 @@ h1 {
 #messageBox {
     font-size: 14px;
     padding: 5px 5px 5px 15px !important;
-    border-radius: 15px;
+    border-radius: 10px;
     float: left;
     outline: none; 
     user-select: text; 
@@ -91,6 +91,7 @@ h1 {
 button {
     padding: 5px !important;
     margin-right: 6px;
+    color: black;
 }
 
 .topnav {
@@ -113,10 +114,11 @@ button {
     color: #f2f2f2;
     text-align: center;
     padding: 7px 1px;
-    text-decoration: none;
+    text-decoration: solid;
     font-size: 17px;
     position: absolute;
-    left: 75px;
+    left: 70px;
+    top: 5px;
 }
   
   /* Change the color of links on hover */
@@ -125,10 +127,18 @@ button {
     border: none;
     outline: none;
 }
+.topnav p{
+    font-size: 10px;
+    margin-top: 0px;
+    margin-left: 60px;
+    left: 70px;
+    top: 10px;
+}
 .topnav .circle {
     float: left;
     position: absolute;
-    top: 12px;
+    left: 30px;
+    top: 9px;
 }
 
 .topnav .circle .dot {
@@ -142,8 +152,21 @@ button {
     position: fixed;
     top:0;
     width: 100%;
-    height: 30px;
+    height: 40px;
     margin-top:0;
     background-color: var(--vscode-editor-background);
 }
+.arrow {
+    border: solid rgb(255, 255, 255);
+    border-width: 0 1px 1px 0;
+    display: inline-block;
+    padding: 4px;
+    margin-top: 11px;
+  }
+
+.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+    
+  }
   
