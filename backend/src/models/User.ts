@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-var User = new mongoose.Schema({
+var userSchema = new mongoose.Schema({
     githubId:{
         type: String,
         required: true
@@ -8,5 +9,16 @@ var User = new mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    avatarUrl:{
+        type: String,
+        required: true
+    },
+    profileUrl: {
+        type: String,
+        required: false
     }
-})
+
+});
+
+module.exports = mongoose.model("User",userSchema);
