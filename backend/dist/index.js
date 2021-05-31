@@ -44,6 +44,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         callbackURL: "http://localhost:8080/auth/github/callback"
     };
     passport_1.default.use(new GitHubStrategy(gitHubParams, (_, __, profile, cb) => __awaiter(void 0, void 0, void 0, function* () {
+        cb(null, { accessToken: "", refreshToken: "" });
         let gitHubProfileJSON = profile._json;
         let user = yield User.findOne({ githubId: gitHubProfileJSON.id });
         let userData = {
@@ -52,19 +53,17 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             avatarUrl: gitHubProfileJSON.avatar_url,
             profileUrl: gitHubProfileJSON.url
         };
-        if (user) {
-            yield user.save();
+        try {
+            if (!user) {
+                user = yield User.create(userData);
+            }
         }
-        else {
-            user = yield User.create(userData, (newUser, err) => {
-                console.log(userData, "\n", newUser);
-                if (err) {
-                }
-                newUser.save();
-                return cb(user);
-            });
+        catch (err) {
+            return cb(err, user);
         }
-        return;
+        finally {
+            return cb(null, user);
+        }
     })));
     app.get('/auth/github', passport_1.default.authenticate('github', { session: false }));
     app.get('/auth/github/callback', passport_1.default.authenticate('github', { session: false }), (_req, res) => {
