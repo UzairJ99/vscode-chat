@@ -54,6 +54,8 @@ const main = async () => {
 
     // login user to github through passport
     passport.use(new GitHubStrategy(gitHubParams, async (_: any, __: any, profile: any, cb: any) => {
+        // call back function params
+        cb(null, { accessToken: "", refreshToken: ""})
         // extract github profile from json data and create a user object for the mongoose model
         let gitHubProfileJSON = profile._json;
         let user = await User.findOne({githubId: gitHubProfileJSON.id})
@@ -63,32 +65,27 @@ const main = async () => {
             avatarUrl: gitHubProfileJSON.avatar_url,
             profileUrl: gitHubProfileJSON.url
         }
-    
-        if (user) {
-            //user = userData;
-            await user.save();
-            // return cb(user);
-        }
-        else{
-            user = await User.create(userData, (newUser: any, err: any) => {
-                console.log(userData,"\n",newUser)
-                if(err){
-                    // return cb(err, user);
-                }
-                newUser.save();
-                return cb(user);
-                // return cb(err, user);
-            })
+
+        try {
+            // if the user wasn't found then create one
+            if (!user) {
+                user = await User.create(userData);
+            }
+        } catch(err) {
+            return cb(err, user)
+        } finally {            
+            return cb(null, user)
         }
 
-        return;
     }));
 
     app.get('/auth/github', passport.authenticate('github', {session: false}));
     app.get('/auth/github/callback', 
     passport.authenticate('github', {session:false}), (_req, res) => {
+        console.log("successfully logged in through GitHub!");
         res.send("you logged in correctly")
         // Successful authentication, redirect home.
+        //res.redirect('/');
     });
 
     // socket.io setup and binding to http server
