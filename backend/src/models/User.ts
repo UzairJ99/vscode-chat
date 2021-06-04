@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import mongoose from '../database'
 
 var userSchema = new mongoose.Schema({
     githubId:{

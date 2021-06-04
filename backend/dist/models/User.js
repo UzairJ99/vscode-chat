@@ -1,6 +1,10 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-var userSchema = new mongoose.Schema({
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const database_1 = __importDefault(require("../database"));
+var userSchema = new database_1.default.Schema({
     githubId: {
         type: String,
         required: true
@@ -18,5 +22,5 @@ var userSchema = new mongoose.Schema({
         required: false
     }
 });
-module.exports = mongoose.model("User", userSchema);
+module.exports = database_1.default.model("User", userSchema);
 //# sourceMappingURL=User.js.map
