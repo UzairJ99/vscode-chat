@@ -1,5 +1,4 @@
 <svelte:window on:unload={emitUserDisconnect}/>
-
 <script>
     import axios from 'axios';
     import Heading from './Heading.svelte';
@@ -119,7 +118,7 @@
 
 <!-- Messages UI Starts Here -->
 
-<Heading text={''} />
+<Heading text={'Name'} />
 
 <!-- unordered list will hold all the messages exchanged between the users-->
 <div class='messageContainer'>

@@ -1,7 +1,7 @@
-import App from "../components/ChatList.svelte";
+import App from "../components/Controller.svelte";
 
 const app = new App({
-  target: document.body,
+  target: document.body
 });
 
 export default app;

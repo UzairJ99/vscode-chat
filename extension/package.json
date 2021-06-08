@@ -85,6 +85,8 @@
 		"mongoose": "^5.12.5",
 		"socket.io": "^4.1.1",
 		"socket.io-client": "^4.1.1",
+		"svelte-routing": "^1.6.0",
+		"svelte-spa-router": "^3.1.0",
 		"sveltestrap": "^5.0.5"
 	}
 }
