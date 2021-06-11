@@ -7,5 +7,12 @@
         push('/Chat');
     }
 </script>
+<div id="background">
+    <div id="card">
+        <button id="login" on:click|preventDefault={navigate}>LOGIN</button>
+    </div>
+</div>
 
-<button on:click|preventDefault={navigate}>Login</button>
+
+
+

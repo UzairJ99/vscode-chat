@@ -169,4 +169,38 @@ button {
     -webkit-transform: rotate(135deg);
     
   }
+#background{
+    height: 100vh;
+    width: 100%;
+    background-image: linear-gradient(rgb(129, 172, 231),rgb(91, 149, 236));
+    
+}
+#card{
+    height: 30%;
+    width: 60%;
+    background-image: linear-gradient(rgb(164, 193, 226),rgb(106, 160, 241));
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -moz-box-shadow: 0 0 3px rgb(119, 120, 122);
+    -webkit-box-shadow: 0 0 3px rgb(135, 168, 206);
+    box-shadow: 10px 10px 5px rgb(13, 130, 240);
+      
+    
+}
+#login{
+    height: 50px;
+    width: 150px; 
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 248, 220, 0.151);
+    font-size: 20px;
+    color: rgb(231, 235, 241);
+    
+}
   
