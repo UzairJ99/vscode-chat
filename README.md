@@ -22,8 +22,8 @@ Customizable Themes to Choose From:
 
 ## Requirements
 
-VS Code
-GitHub account
+- VS Code
+- GitHub account
 
 ## Known Issues
 
