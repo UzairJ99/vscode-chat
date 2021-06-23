@@ -1,0 +1,36 @@
+{
+    "rooms": [
+        {
+            "_id": 123,
+            "users": [
+                {
+                    "user_id": 123,
+                    "name": "somedude"
+                },
+                {
+                    "user_id": 456,
+                    "name": "someotherdude"
+                }
+            ],
+            "roles": {
+                "owner": 123,
+                "regular":[
+                    456,
+                    789
+                ]
+            },
+            "messages": [
+                {
+                    "user_id": 456,
+                    "text": "hi" ,
+                    "timestamp": "10-12-02:11:23:00"
+                },
+                {
+                    "user_id": 123,
+                    "text": "what's up" ,
+                    "timestamp": "10-12-02:22:34:03"
+                }
+            ]
+        }
+    ]
+}
