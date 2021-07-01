@@ -1,0 +1,51 @@
+#background {
+    height: 100vh;
+    width: 100%;
+    background-image: linear-gradient(rgb(129, 172, 231),rgb(91, 149, 236));
+
+}
+
+#card {
+    height: 30%;
+    width: 60%;
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -moz-box-shadow: 0 0 1px rgb(119, 120, 122);
+    -webkit-box-shadow: 0 0 1px rgb(135, 168, 206);
+    box-shadow: 3px 3px 3px rgb(13, 130, 240);
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#cardTitle {
+    color: black;
+}
+
+#login {
+    height: 70px;
+    width: 70%; 
+    border-radius: 15px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: 3vh;
+    transform: translate(-50%, -50%);
+    background-color: #DBDBDB;
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#githubLogo {
+    background-image: url(./github-logo.png);
+    background-size: 100% auto;
+    height: 70px;
+    width: 60px;
+    display: inline-block;    
+}

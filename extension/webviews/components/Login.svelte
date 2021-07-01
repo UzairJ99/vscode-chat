@@ -11,7 +11,8 @@
 <div id="background">
     VS CHAT
     <div id="card">
-        <button id="login" on:click|preventDefault={navigate}><div id="logo"></div></button>
+        <h2 id="cardTitle">GitHub Sign In</h2>
+        <button id="login" on:click|preventDefault={navigate}><div id="githubLogo"></div></button>
     </div>
 </div>
 

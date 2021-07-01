@@ -1,0 +1,83 @@
+.messageBubble-right {
+    list-style-type: none;
+    background-color: white;
+    padding: 15px;
+    border-radius: 15px;
+    color: black;
+    float: right;
+    max-width: 60%;
+    margin: 5px 0 5px -15px;
+    white-space: pre-wrap; 
+    overflow-wrap: break-word;
+}
+
+/* message bubble stuff */
+.messageBubble-left {
+    list-style-type: none;
+    background-color: white;
+    padding: 15px;
+    border-radius: 15px;
+    color: black;
+    float: left;
+    max-width: 60%;
+    margin: 5px 0 5px -15px;
+    white-space: pre-wrap; 
+    overflow-wrap: break-word;
+}
+
+
+.msgBubbleContainer {
+    width: 100%;
+    display: inline-block;
+}
+
+.messageContainer {
+    /* position: fixed; */
+    height: 90%;
+    width: 100%;
+    overflow-y: scroll;
+    margin-bottom: 40px;
+    margin-top: 40px;
+}
+/* end of message bubble stuff */
+
+/* start of message bar */
+#userTyping {
+    bottom: 0;
+}
+
+#messageSpan {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    width: 90%;
+    height: 42px;
+    float: right;
+    background-color: var(--vscode-editor-background);
+    margin-bottom: 0;
+    padding: 10px;
+}
+
+#messageBox:hover, #messageBox:focus, #sendMsgButton:hover, #sendMsgButton:focus {
+    border: none;
+    outline: none;
+}
+
+#messageBox {
+    font-size: 14px;
+    padding: 5px 5px 5px 15px !important;
+    border-radius: 10px;
+    float: left;
+    outline: none; 
+    user-select: text; 
+    white-space: pre-wrap; 
+    overflow-wrap: break-word;
+}
+
+#sendMsgBtn {
+    width: 15%;
+    margin-left: 10px;
+    border-radius: 15px;
+    float: right;
+    margin-right: 0;
+}
