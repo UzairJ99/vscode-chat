@@ -141,6 +141,18 @@ export class ChatPanel {
       vscode.Uri.joinPath(this._extensionUri, "media", "demo.css")
     );
 
+    const loginPageCSS = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "loginPage.css")
+    );
+
+    const messagesPageCSS = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "messagesPage.css")
+    );
+
+    const navbarCSS = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, "media", "navbar.css")
+    );
+
     const scriptUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "out/compiled", "Chats.js")
     );
@@ -159,6 +171,9 @@ export class ChatPanel {
         <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
 			  <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <link href="${demoUri}" rel="stylesheet">
+          <link href="${navbarCSS}" rel="stylesheet">
+          <link href="${messagesPageCSS}" rel="stylesheet">
+          <link href="${loginPageCSS}" rel="stylesheet">
           <link href="${styleMainUri}" rel="stylesheet">
           <script nonce="${nonce}"></script>
 		  </head>
