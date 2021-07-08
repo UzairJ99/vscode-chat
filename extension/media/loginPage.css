@@ -4,7 +4,17 @@
     background-image: linear-gradient(rgb(129, 172, 231),rgb(91, 149, 236));
 
 }
+#vschat{
+display: flex;
+justify-content: center; /* align horizontal */
+align-items: center; /* align vertical */
+color: black;
+position: relative;
+top: 180px;
+font-family: 'Poppins', sans-serif;
 
+
+}
 #card {
     height: 30%;
     width: 60%;
@@ -23,6 +33,7 @@
 
 #cardTitle {
     color: black;
+    font-family: 'Poppins', sans-serif;
 }
 
 #login {
@@ -30,7 +41,7 @@
     width: 70%; 
     border-radius: 15px;
     position: absolute;
-    top: 50%;
+    top: 42%;
     left: 50%;
     margin-top: 3vh;
     transform: translate(-50%, -50%);
