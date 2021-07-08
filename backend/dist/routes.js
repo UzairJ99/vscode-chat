@@ -13,10 +13,5 @@ app.use(bodyParser.json());
 app.get('/', (_req, res) => {
     res.send("HI");
 });
-app.post('/sendMessage', (req, res) => {
-    let message = req.body;
-    console.log(message);
-    res.send(message);
-});
 exports.default = app;
 //# sourceMappingURL=routes.js.map

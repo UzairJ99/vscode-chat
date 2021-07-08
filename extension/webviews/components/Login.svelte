@@ -2,9 +2,17 @@
 <script>
     import {push, pop, replace} from 'svelte-spa-router';
     import io from "socket.io-client";
+    import axios from 'axios';
     let logo= "images/github-logo.png";
     const socket = io('http://localhost:8080');
-    function navigate() {
+    async function navigate() {
+        // try {
+        //     let response = await axios.get('https://localhost:8080/auth/github');
+        // } catch (err) {
+        //     console.log(err);
+        // }
+        
+        console.log(response);
         push('/Chat');
     }
 </script>

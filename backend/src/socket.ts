@@ -1,4 +1,4 @@
-import app from './auth'
+import {app} from './auth'
 // socket.io setup and binding to http server
 const http = require('http');
 const server = http.createServer(app);
