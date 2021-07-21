@@ -8,10 +8,10 @@
 display: flex;
 justify-content: center; /* align horizontal */
 align-items: center; /* align vertical */
-color: black;
+color: rgba(0, 0, 0, 0.582);
 position: relative;
 top: 180px;
-font-family: 'Poppins', sans-serif;
+font-family: 'Valera Round', sans-serif;
 
 
 }
