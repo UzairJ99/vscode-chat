@@ -156,6 +156,7 @@ export class ChatPanel {
     const scriptUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "out/compiled", "Chats.js")
     );
+   
 
     // Use a nonce to only allow specific scripts to be run
     const nonce = getNonce();
@@ -175,7 +176,10 @@ export class ChatPanel {
           <link href="${messagesPageCSS}" rel="stylesheet">
           <link href="${loginPageCSS}" rel="stylesheet">
           <link href="${styleMainUri}" rel="stylesheet">
-          <script nonce="${nonce}"></script>
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet"> 
+       <script nonce="${nonce}"></script>
 		  </head>
         <body>
 		    </body>

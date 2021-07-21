@@ -5,6 +5,11 @@
           push('/Settings');
       }
   </script>
-<div class = "bar">
-        <button id="settings" on:click|preventDefault={navigate}>SETTINGS</button>
-      </div>
+  <div id = "contactNav">
+    <div class = "bar">
+      <button id="settings" on:click|preventDefault={navigate}>SETTINGS</button>
+    </div>
+
+  </div>
+
+

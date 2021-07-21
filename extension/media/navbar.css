@@ -1,5 +1,5 @@
 .topnav {
-    background-color: rgba(0, 0, 0);
+    background-color: #5500ff;
     overflow: hidden;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -50,7 +50,7 @@
 .topnav .circle .dot {
     height: 35px;
     width: 35px;
-    background-color: #bbb;
+    background-color: rgb(255, 255, 255);
     border-radius: 50%;
     display: inline-block;
 }
@@ -80,4 +80,11 @@
     transform: rotate(135deg);
     -webkit-transform: rotate(135deg);
     
+}
+#add{
+    background-image: url(./person_add.png);
+    background-size: 100%;
+    height: 70px;
+    width: 60px;
+
 }
