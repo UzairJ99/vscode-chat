@@ -1,6 +1,5 @@
 <script>
     import {push, pop, replace, link} from 'svelte-spa-router';
-    export let text;
     function navigate() {
           push('/Settings');
       }

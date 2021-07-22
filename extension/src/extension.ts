@@ -59,7 +59,11 @@ export function activate(context: vscode.ExtensionContext) {
 	// testing authentication
 	context.subscriptions.push(
 		vscode.commands.registerCommand('vs-chat.authenticate', () => {
-			authenticate();
+			try {
+				authenticate();
+			} catch (err) {
+				console.log(err);
+			}
 		})
 	);
 }
