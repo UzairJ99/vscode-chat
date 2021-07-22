@@ -20,6 +20,10 @@ var userSchema = new database_1.default.Schema({
     profileUrl: {
         type: String,
         required: false
+    },
+    accessToken: {
+        type: String,
+        required: false
     }
 });
 module.exports = database_1.default.model("User", userSchema);
