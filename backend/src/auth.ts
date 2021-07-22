@@ -32,7 +32,8 @@ passport.use(new GitHubStrategy(gitHubParams, async (accessToken: any, refreshTo
         githubId: gitHubProfileJSON.id, 
         name: gitHubProfileJSON.name, 
         avatarUrl: gitHubProfileJSON.avatar_url,
-        profileUrl: gitHubProfileJSON.url
+        profileUrl: gitHubProfileJSON.url,
+        accessToken: accessToken
     }
     try {
         // if the user wasn't found then create one
@@ -54,10 +55,8 @@ app.use(passport.session());
 app.get('/auth/github', passport.authenticate('github', {session: false}));
 app.get('/auth/github/callback', 
     passport.authenticate('github', {session:false}), (req, res) => {
-        console.log("successfully logged in through GitHub!");
-        res.send("you logged in correctly")
         console.log(req.user)
-        // Successful authentication, redirect home.
-        //res.redirect('/');
+        // Successful authentication, send the access token to vs code's server
+        res.redirect(`http://localhost:3002/auth/${req.user.accessToken}`);
 });
 export {app}

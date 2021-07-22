@@ -38,7 +38,8 @@ passport_1.default.use(new GitHubStrategy(gitHubParams, (accessToken, refreshTok
         githubId: gitHubProfileJSON.id,
         name: gitHubProfileJSON.name,
         avatarUrl: gitHubProfileJSON.avatar_url,
-        profileUrl: gitHubProfileJSON.url
+        profileUrl: gitHubProfileJSON.url,
+        accessToken: accessToken
     };
     try {
         if (!user) {
@@ -57,8 +58,7 @@ routes_1.default.use(passport_1.default.initialize());
 routes_1.default.use(passport_1.default.session());
 routes_1.default.get('/auth/github', passport_1.default.authenticate('github', { session: false }));
 routes_1.default.get('/auth/github/callback', passport_1.default.authenticate('github', { session: false }), (req, res) => {
-    console.log("successfully logged in through GitHub!");
-    res.send("you logged in correctly");
     console.log(req.user);
+    res.redirect(`http://localhost:3002/auth/${req.user.accessToken}`);
 });
 //# sourceMappingURL=auth.js.map

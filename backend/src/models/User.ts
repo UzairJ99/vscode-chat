@@ -16,8 +16,11 @@ var userSchema = new mongoose.Schema({
     profileUrl: {
         type: String,
         required: false
+    },
+    accessToken: {
+        type: String,
+        required: false
     }
-
 });
 
 module.exports = mongoose.model("User",userSchema);
