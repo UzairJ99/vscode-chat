@@ -1,6 +1,6 @@
-<style>
+<!-- <style>
     @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
-    </style>
+</style> -->
 <script>
     import {push, pop, replace} from 'svelte-spa-router';
     import io from "socket.io-client";
