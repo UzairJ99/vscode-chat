@@ -81,7 +81,7 @@
     -webkit-transform: rotate(135deg);
     
 }
-#add{
+.add{
     background-image: url(./person_add.png);
     background-size: 100%;
     height: 70px;

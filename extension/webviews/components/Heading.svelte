@@ -25,6 +25,5 @@ import { svg_element } from 'svelte/internal';
     <a href="#Name">{text}</a>
     <p>Activity Status</p>
     <!-- svelte-ignore a11y-missing-attribute -->
-    
   </div>
 </div>
