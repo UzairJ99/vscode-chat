@@ -20,7 +20,13 @@ var userSchema = new mongoose.Schema({
     accessToken: {
         type: String,
         required: false
-    }
+    },
+    rooms:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Rooms"
+        }
+    ]
 });
 
 module.exports = mongoose.model("User",userSchema);
