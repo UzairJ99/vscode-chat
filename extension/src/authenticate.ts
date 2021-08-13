@@ -15,6 +15,13 @@ export const authenticate = (
     const app = polka();
     const LOGINPORT = 3002;
 
+    app.get('/login',async(req: any, res:any)=>{
+        //res.send("hello, workj man, kill me, I hate Neesh")
+        vscode.commands.executeCommand(
+            "vscode.open",
+            vscode.Uri.parse('http://localhost:8080/auth/github')
+        );
+    })
     app.get(`/auth/:token`, async (req: any, res: any) => {
         const { token } = req.params;
         if (!token) {
@@ -28,14 +35,6 @@ export const authenticate = (
     });
 
     app.listen(LOGINPORT, (err:Error) => {
-        if (err) {
-            vscode.window.showErrorMessage(err.message);
-        } else {
-            // vs code will spin up it's own server on port 3002
-            vscode.commands.executeCommand(
-                "vscode.open",
-                vscode.Uri.parse('http://localhost:8080/auth/github')
-            );
-        }
+        console.log("Authenticate started")
     });
 };

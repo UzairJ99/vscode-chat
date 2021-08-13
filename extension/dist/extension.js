@@ -47,12 +47,24 @@ function activate(context) {
     })));
     // this is the main command to run this extension
     context.subscriptions.push(vscode.commands.registerCommand('vs-chat.chatroom', () => {
+        try {
+            authenticate_1.authenticate();
+        }
+        catch (err) {
+            console.log(err);
+        }
         ChatPanel_1.ChatPanel.createOrShow(context.extensionUri);
     }));
     // this command lets us refresh webviews whenever we make changes
     // speeds up our development progress
     context.subscriptions.push(vscode.commands.registerCommand('vs-chat.refresh', () => {
         ChatPanel_1.ChatPanel.kill();
+        try {
+            authenticate_1.authenticate();
+        }
+        catch (err) {
+            console.log(err);
+        }
         ChatPanel_1.ChatPanel.createOrShow(context.extensionUri);
         // the chat panel doesn't show instantly so we'll give the next command a small delay
         setTimeout(() => {
@@ -289,6 +301,10 @@ const authenticate = (
     // let session = require("express-session");
     const app = polka();
     const LOGINPORT = 3002;
+    app.get('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        //res.send("hello, workj man, kill me, I hate Neesh")
+        vscode.commands.executeCommand("vscode.open", vscode.Uri.parse('http://localhost:8080/auth/github'));
+    }));
     app.get(`/auth/:token`, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { token } = req.params;
         if (!token) {
@@ -299,13 +315,7 @@ const authenticate = (
         res.end(`<h1>auth was successful.</h1>`);
     }));
     app.listen(LOGINPORT, (err) => {
-        if (err) {
-            vscode.window.showErrorMessage(err.message);
-        }
-        else {
-            // vs code will spin up it's own server on port 3002
-            vscode.commands.executeCommand("vscode.open", vscode.Uri.parse('http://localhost:8080/auth/github'));
-        }
+        console.log("Authenticate started");
     });
 };
 exports.authenticate = authenticate;

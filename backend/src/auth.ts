@@ -55,6 +55,7 @@ app.use(passport.session());
 app.get('/auth/github', passport.authenticate('github', {session: false}));
 app.get('/auth/github/callback', 
     passport.authenticate('github', {session:false}), (req, res) => {
+        console.log("hitt")
         console.log(req.user)
         // Successful authentication, send the access token to vs code's server
         res.redirect(`http://localhost:3002/auth/${req.user.accessToken}`);

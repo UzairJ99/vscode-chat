@@ -58,6 +58,7 @@ routes_1.default.use(passport_1.default.initialize());
 routes_1.default.use(passport_1.default.session());
 routes_1.default.get('/auth/github', passport_1.default.authenticate('github', { session: false }));
 routes_1.default.get('/auth/github/callback', passport_1.default.authenticate('github', { session: false }), (req, res) => {
+    console.log("hitt");
     console.log(req.user);
     res.redirect(`http://localhost:3002/auth/${req.user.accessToken}`);
 });
