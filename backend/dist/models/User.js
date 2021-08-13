@@ -24,7 +24,13 @@ var userSchema = new database_1.default.Schema({
     accessToken: {
         type: String,
         required: false
-    }
+    },
+    rooms: [
+        {
+            type: database_1.default.Schema.Types.ObjectId,
+            ref: "Rooms"
+        }
+    ]
 });
 module.exports = database_1.default.model("User", userSchema);
 //# sourceMappingURL=User.js.map

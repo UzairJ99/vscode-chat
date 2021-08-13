@@ -8,14 +8,14 @@
     let logo= "images/github-logo.png";
     const socket = io('http://localhost:8080');
     async function navigate() {
-        // try {
-        //     let response = await axios.get('https://localhost:8080/auth/github');
-        // } catch (err) {
-        //     console.log(err);
-        // }
+        try {
+            var response = await axios.get('http://localhost:3002/login');
+            console.log("success")
+        } catch (err) {
+            console.log(err);
+        }
         
-        // console.log(response);
-        push('/Chat');
+        
     }
 </script>
 <div id="background">

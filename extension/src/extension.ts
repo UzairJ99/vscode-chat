@@ -39,6 +39,11 @@ export function activate(context: vscode.ExtensionContext) {
 	// this is the main command to run this extension
 	context.subscriptions.push(
 		vscode.commands.registerCommand('vs-chat.chatroom', () => {
+			try {
+				authenticate();
+			} catch (err) {
+				console.log(err);
+			}
 			ChatPanel.createOrShow(context.extensionUri);
 		})
 	);
@@ -48,6 +53,11 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('vs-chat.refresh', () => {
 			ChatPanel.kill();
+			try {
+				authenticate();
+			} catch (err) {
+				console.log(err);
+			}
 			ChatPanel.createOrShow(context.extensionUri);
 			// the chat panel doesn't show instantly so we'll give the next command a small delay
 			setTimeout(()=> {
