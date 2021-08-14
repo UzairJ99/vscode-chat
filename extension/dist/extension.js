@@ -21,9 +21,11 @@ exports.deactivate = exports.activate = void 0;
 const vscode = __webpack_require__(1);
 const ChatPanel_1 = __webpack_require__(2);
 const authenticate_1 = __webpack_require__(4);
+const TokenMgr_1 = __webpack_require__(12);
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
+    TokenMgr_1.TokenMgr.globalState = context.globalState;
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "vs-chat" is now active!');
@@ -34,7 +36,7 @@ function activate(context) {
     Wrap each new command that we want registered inside the context subscriptions push function
     */
     context.subscriptions.push(vscode.commands.registerCommand('vs-chat.helloWorld', () => {
-        vscode.window.showInformationMessage("Hello from VS-Chat!");
+        vscode.window.showInformationMessage("token value is" + TokenMgr_1.TokenMgr.getToken());
     }));
     context.subscriptions.push(vscode.commands.registerCommand('vs-chat.askQuestion', () => __awaiter(this, void 0, void 0, function* () {
         const answer = yield vscode.window.showInformationMessage('How was your day?', 'good', 'bad');
@@ -294,6 +296,7 @@ const polka = __webpack_require__(5);
 const vscode = __webpack_require__(1);
 // import * as passport from "passport";
 // import { APIBASEURL } from "./constants";
+const TokenMgr_1 = __webpack_require__(12);
 // https://github.com/shanalikhan/code-settings-sync/blob/master/src/service/github.oauth.service.ts
 const authenticate = (
 // fn: (x: {accessToken: string; refreshToken: string}) => void
@@ -311,8 +314,10 @@ const authenticate = (
             res.end(`<h1>Something went wrong</h1>`);
             return;
         }
-        console.log(token);
+        yield TokenMgr_1.TokenMgr.setToken(token);
+        // console.log(token);
         res.end(`<h1>auth was successful.</h1>`);
+        app.server.close();
     }));
     app.listen(LOGINPORT, (err) => {
         console.log("Authenticate started");
@@ -671,6 +676,25 @@ module.exports = function (req) {
 
 	return (req._parsedUrl = obj);
 }
+
+
+/***/ }),
+/* 12 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TokenMgr = void 0;
+class TokenMgr {
+    static setToken(token) {
+        return this.globalState.update("vsChatToken", token);
+    }
+    static getToken() {
+        return this.globalState.get("vsChatToken");
+    }
+}
+exports.TokenMgr = TokenMgr;
 
 
 /***/ })

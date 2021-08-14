@@ -5,7 +5,7 @@ import * as polka from "polka";
 import * as vscode from "vscode";
 // import * as passport from "passport";
 // import { APIBASEURL } from "./constants";
-
+import { TokenMgr} from './TokenMgr';
 
 // https://github.com/shanalikhan/code-settings-sync/blob/master/src/service/github.oauth.service.ts
 export const authenticate = (
@@ -28,10 +28,10 @@ export const authenticate = (
             res.end(`<h1>Something went wrong</h1>`);
             return;
         }
-
-        console.log(token);
-
+        await TokenMgr.setToken(token);
+        // console.log(token);
         res.end(`<h1>auth was successful.</h1>`);
+        (app as any).server.close();
     });
 
     app.listen(LOGINPORT, (err:Error) => {

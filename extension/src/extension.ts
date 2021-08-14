@@ -3,11 +3,12 @@
 import * as vscode from 'vscode';
 import { ChatPanel } from './ChatPanel';
 import { authenticate } from './authenticate';
+import { TokenMgr} from './TokenMgr';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
+	TokenMgr.globalState = context.globalState;
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "vs-chat" is now active!');
@@ -20,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 	*/
 	context.subscriptions.push(
 		vscode.commands.registerCommand('vs-chat.helloWorld', () => {
-			vscode.window.showInformationMessage("Hello from VS-Chat!");
+			vscode.window.showInformationMessage("token value is" + TokenMgr.getToken());
 		})
 	);
 
