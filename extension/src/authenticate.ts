@@ -9,19 +9,22 @@ import { TokenMgr} from './TokenMgr';
 
 // https://github.com/shanalikhan/code-settings-sync/blob/master/src/service/github.oauth.service.ts
 export const authenticate = (
+    // TODO: setup refresh token when this function is called
     // fn: (x: {accessToken: string; refreshToken: string}) => void
 ) => {
     // let session = require("express-session");
     const app = polka();
     const LOGINPORT = 3002;
 
-    app.get('/login',async(req: any, res:any)=>{
-        //res.send("hello, workj man, kill me, I hate Neesh")
+    // open login portal for the user in a new window.
+    app.get('/login',async(_req: any, _res:any) => {
         vscode.commands.executeCommand(
             "vscode.open",
             vscode.Uri.parse('http://localhost:8080/auth/github')
         );
-    })
+    });
+
+    // receive authentication token from backend after the user gets redirected.
     app.get(`/auth/:token`, async (req: any, res: any) => {
         const { token } = req.params;
         if (!token) {
@@ -29,12 +32,16 @@ export const authenticate = (
             return;
         }
         await TokenMgr.setToken(token);
-        // console.log(token);
+
         res.end(`<h1>auth was successful.</h1>`);
         (app as any).server.close();
     });
 
+    // spin up the server.
     app.listen(LOGINPORT, (err:Error) => {
-        console.log("Authenticate started")
+        if (err) {
+            console.log(err);
+        }
+        console.log("Authentication server started");
     });
 };

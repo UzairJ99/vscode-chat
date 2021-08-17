@@ -45,11 +45,13 @@ export class ChatPanel {
     ChatPanel.currentPanel = new ChatPanel(panel, extensionUri);
   }
 
+  // close chat panel
   public static kill() {
     ChatPanel.currentPanel?.dispose();
     ChatPanel.currentPanel = undefined;
   }
 
+  // re-open chat panel
   public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
     ChatPanel.currentPanel = new ChatPanel(panel, extensionUri);
   }
@@ -61,22 +63,8 @@ export class ChatPanel {
     // Set the webview's initial html content
     this._update();
 
-    // Listen for when the panel is disposed
-    // This happens when the user closes the panel or when the panel is closed programatically
+    // Listen for when the panel is closed
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-
-    // // Handle messages from the webview
-    // this._panel.webview.onDidReceiveMessage(
-    //   (message) => {
-    //     switch (message.command) {
-    //       case "alert":
-    //         vscode.window.showErrorMessage(message.text);
-    //         return;
-    //     }
-    //   },
-    //   null,
-    //   this._disposables
-    // );
   }
 
   public dispose() {
@@ -113,6 +101,7 @@ export class ChatPanel {
           vscode.window.showErrorMessage(data.value);
           break;
         }
+        // TODO: store token in app state upon user login
         // case "tokens": {
         //   await Util.globalState.update(accessTokenKey, data.accessToken);
         //   await Util.globalState.update(refreshTokenKey, data.refreshToken);
@@ -123,11 +112,11 @@ export class ChatPanel {
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
-    /*
-    URI to load CSS files into the webview. Follow this format when making file URIs:
-    @param base: string - the base path to the file
-    @param media: string - the subfolder after the base path
-    @param reset.css: string - the css file
+    /**
+    * URI to load CSS files into the webview. Follow this format when making file URIs:
+    * @param base: string - the base path to the file
+    * @param media: string - the subfolder after the base path
+    * @param reset.css: string - the css file
     */
     const styleResetUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "media", "reset.css")
@@ -158,7 +147,7 @@ export class ChatPanel {
     );
    
 
-    // Use a nonce to only allow specific scripts to be run
+    // Use a nonce to only allow specific scripts to be run - whitelisting
     const nonce = getNonce();
 
     return `<!DOCTYPE html>

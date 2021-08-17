@@ -20,21 +20,23 @@ const gitHubParams = {
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
     callbackURL: "http://localhost:8080/auth/github/callback"
-  }
+}
+
 // login user to github through passport
-passport.use(new GitHubStrategy(gitHubParams, async (accessToken: any, refreshToken: any, profile: any, cb: any) => {
+passport.use(new GitHubStrategy(gitHubParams, async (accessToken: any, _refreshToken: any, profile: any, cb: any) => {
     // call back function params
-    //cb(null, { accessToken: "", refreshToken: ""})
+    // cb(null, { accessToken: "", refreshToken: ""})
     // extract github profile from json data and create a user object for the mongoose model
     let gitHubProfileJSON = profile._json;
     let user = await User.findOne({githubId: gitHubProfileJSON.id})
     let userData = {
-        githubId: gitHubProfileJSON.id, 
-        name: gitHubProfileJSON.name, 
-        avatarUrl: gitHubProfileJSON.avatar_url,
-        profileUrl: gitHubProfileJSON.url,
-        accessToken: accessToken
+        githubId:       gitHubProfileJSON.id, 
+        name:           gitHubProfileJSON.name, 
+        avatarUrl:      gitHubProfileJSON.avatar_url,
+        profileUrl:     gitHubProfileJSON.url,
+        accessToken:    accessToken
     }
+
     try {
         // if the user wasn't found then create one
         if (!user) {
@@ -55,9 +57,16 @@ app.use(passport.session());
 app.get('/auth/github', passport.authenticate('github', {session: false}));
 app.get('/auth/github/callback', 
     passport.authenticate('github', {session:false}), (req, res) => {
-        console.log("hitt")
-        console.log(req.user)
+        console.log(req.user);
+        /**
+         * @NOTE
+         * type casting to <any> because of the express package from TypeScript
+         * doesn't contain user.
+         */
+        let accessToken = (<any>req).user.accessToken;
         // Successful authentication, send the access token to vs code's server
-        res.redirect(`http://localhost:3002/auth/${req.user.accessToken}`);
+        res.redirect(`http://localhost:3002/auth/${accessToken}`);
 });
+
+
 export {app}
