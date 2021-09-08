@@ -1,5 +1,6 @@
 import app from './routes'
 import passport from "passport";
+import TokenMgr from '../../extension/src/TokenMgr'
 let session = require("express-session")
 require('dotenv-safe').config();
 var User = require("./models/User")
@@ -55,9 +56,21 @@ app.use(passport.session());
 app.get('/auth/github', passport.authenticate('github', {session: false}));
 app.get('/auth/github/callback', 
     passport.authenticate('github', {session:false}), (req, res) => {
-        console.log("hitt")
-        console.log(req.user)
         // Successful authentication, send the access token to vs code's server
         res.redirect(`http://localhost:3002/auth/${req.user.accessToken}`);
 });
+app.get("/user", async(req,res)=>{
+    const token = req.headers.authorization;
+    console.log(token)
+    if(!token){
+        res.send({user:null})
+        return
+    }
+    const user = await User.findOne({accessToken: token})
+    if(!user){
+        res.send({user: null})
+        return;
+    }
+    res.send(user);
+})
 export {app}

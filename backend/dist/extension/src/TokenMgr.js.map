@@ -1,0 +1,1 @@
+{"version":3,"file":"TokenMgr.js","sourceRoot":"","sources":["../../../../extension/src/TokenMgr.ts"],"names":[],"mappings":";;;AAEA,MAAa,QAAQ;IAEjB,MAAM,CAAC,QAAQ,CAAC,KAAY;QACxB,OAAO,IAAI,CAAC,WAAW,CAAC,MAAM,CAAC,aAAa,EAAE,KAAK,CAAC,CAAC;IACzD,CAAC;IAED,MAAM,CAAC,QAAQ;QACX,OAAO,IAAI,CAAC,WAAW,CAAC,GAAG,CAAC,aAAa,CAAC,CAAC;IAC/C,CAAC;CACJ;AATD,4BASC"}

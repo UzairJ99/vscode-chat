@@ -14,8 +14,6 @@
         } catch (err) {
             console.log(err);
         }
-        
-        
     }
 </script>
 <div id="background">

@@ -62,6 +62,7 @@ routes_1.default.get('/auth/github/callback', passport_1.default.authenticate('g
 });
 routes_1.default.get("/user", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization;
+    console.log(token);
     if (!token) {
         res.send({ user: null });
         return;

@@ -297,6 +297,7 @@ const vscode = __webpack_require__(1);
 // import * as passport from "passport";
 // import { APIBASEURL } from "./constants";
 const TokenMgr_1 = __webpack_require__(12);
+const redirect = __webpack_require__(13);
 // https://github.com/shanalikhan/code-settings-sync/blob/master/src/service/github.oauth.service.ts
 const authenticate = (
 // fn: (x: {accessToken: string; refreshToken: string}) => void
@@ -316,6 +317,11 @@ const authenticate = (
         }
         yield TokenMgr_1.TokenMgr.setToken(token);
         // console.log(token);
+        redirect(res, 'http://localhost:8080/user', {
+            headers: {
+                authorization: `${token}`
+            }
+        });
         res.end(`<h1>auth was successful.</h1>`);
         app.server.close();
     }));
@@ -696,6 +702,41 @@ class TokenMgr {
 }
 exports.TokenMgr = TokenMgr;
 
+
+/***/ }),
+/* 13 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const { resolve } = __webpack_require__(14);
+
+module.exports = function (res, code=302, location='') {
+	if (!location && typeof code === 'string') {
+		location = code;
+		code = 302;
+	}
+
+	let req = res.socket.parser.incoming;
+	if (location === 'back') {
+		location = req.headers.referrer || req.headers.referer || '/';
+	} else if (location) {
+		location = resolve(req.originalUrl, location);
+	}
+
+	res.writeHead(code, {
+		'Location': location,
+		'Content-Length': 0
+	});
+
+	res.end();
+};
+
+
+/***/ }),
+/* 14 */
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("url");;
 
 /***/ })
 /******/ 	]);

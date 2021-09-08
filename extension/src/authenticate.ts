@@ -6,7 +6,7 @@ import * as vscode from "vscode";
 // import * as passport from "passport";
 // import { APIBASEURL } from "./constants";
 import { TokenMgr} from './TokenMgr';
-
+const redirect = require('@polka/redirect');
 // https://github.com/shanalikhan/code-settings-sync/blob/master/src/service/github.oauth.service.ts
 export const authenticate = (
     // fn: (x: {accessToken: string; refreshToken: string}) => void
@@ -30,6 +30,11 @@ export const authenticate = (
         }
         await TokenMgr.setToken(token);
         // console.log(token);
+        redirect(res, 'http://localhost:8080/user',{
+            headers:{
+                authorization: `${token}`
+            }
+        });
         res.end(`<h1>auth was successful.</h1>`);
         (app as any).server.close();
     });
